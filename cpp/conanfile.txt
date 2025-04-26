@@ -1,0 +1,10 @@
+[requires]
+onnxruntime/1.21.1
+gtest/1.16.0
+
+[generators]
+cmake_find_package
+cmake_paths
+
+[options]
+onnxruntime:shared=True
