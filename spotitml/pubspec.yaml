@@ -1,5 +1,5 @@
 name: spotitml
-description: "A machine learning app for recognizing Spot It! symbols."
+description: "SpotIt ML - Spot It! card symbol detection using machine learning"
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -11,11 +11,17 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  camera: ^0.10.5+9
+  ffi: ^2.1.2
+  path_provider: ^2.1.2
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.8
 
 flutter:
   uses-material-design: true
