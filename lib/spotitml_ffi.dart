@@ -23,4 +23,8 @@ class SpotitmlNative {
 
   static final addNumbers = _lib
       .lookupFunction<ffi.Int32 Function(ffi.Int32, ffi.Int32), int Function(int, int)>('add_numbers');
+
+  static final detectObjects = _lib
+      .lookupFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<ffi.Uint8>, ffi.Int32, ffi.Int32), 
+                      ffi.Pointer<Utf8> Function(ffi.Pointer<ffi.Uint8>, int, int)>('detect_objects');
 }
