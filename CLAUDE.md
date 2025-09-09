@@ -1,26 +1,27 @@
 # SpotItML Development Notes
 
-## Current Status (Phase 1a - Infrastructure Complete, ONNX Blocked)
+## Current Status (Phase 1a - COMPLETE! 🎉)
 
-**What Works**: ✅ Comprehensive build infrastructure
-- Basic Flutter + C++ FFI pipeline working (`hello_world`, `add_numbers`, `detect_objects`)
+**✅ PHASE 1a ACHIEVED**: Flutter + C++ FFI + ONNX Runtime integration working end-to-end!
+
+**What Works**: ✅ Full working pipeline
+- Basic Flutter + C++ FFI pipeline: `hello_world` → "Hello from C++!", `add_numbers(3,4)` → 7  
+- **ONNX Runtime integration**: `detect_objects` → "ONNX Runtime loaded successfully. Image: 640x480"
 - Automated Android build integration via Gradle + CMake
 - Professional macOS build scripts (`scripts/build_macos.sh`, `scripts/deploy_native_libs.sh`)
-- Proper RPATH linking configuration for macOS App Sandbox compatibility
 - Clean dependency management (removed 27MB checked-in binaries)
 
-**Current Blocker**: ❌ ONNX Runtime dependency hell
-- **Problem**: Homebrew ONNX Runtime has 80+ transitive dependencies
-- **Issue**: All dependencies use absolute paths (`/usr/local/opt/onnx/lib/libonnx.dylib`, etc.)
-- **Conflict**: macOS App Sandbox blocks access to system library paths
-- **Scale**: Would need to bundle and fix RPATH for dozens of libraries (onnx, protobuf, abseil, re2, etc.)
-- **Status**: Too complex for current approach - need static ONNX Runtime build instead
+**Key Solution**: ❌ App Sandbox → ✅ Development Mode
+- **Problem Solved**: Disabled App Sandbox for development builds (`com.apple.security.app-sandbox = false`)
+- **Result**: Direct access to system ONNX Runtime libraries without bundling complexity
+- **Trade-off**: No App Store distribution (which we don't need)
 
 **Infrastructure Completed**:
-- Android: Maven dependency + automated native builds
-- macOS: System package manager + automated build pipeline  
-- Code signing automation for both platforms
-- Clean repo (no checked-in binaries)
+- ✅ Android: Maven dependency + automated native builds
+- ✅ macOS: System package manager + automated build pipeline + disabled sandbox
+- ✅ Code signing automation for both platforms  
+- ✅ Clean repo (no checked-in binaries)
+- ✅ **ONNX Runtime working on macOS development platform**
 
 ## Build Commands (Automated)
 
@@ -62,68 +63,45 @@ open "build/macos/Build/Products/Debug/spotitml.app"
 
 ## Next Steps Priority
 
-### ✅ Phase 1a-bis: Build System Complete
-All infrastructure goals achieved:
-- ✅ Android automated builds with Maven + CMake integration  
-- ✅ Clean dependency management (no checked-in binaries)
-- ✅ macOS automated build scripts with proper RPATH linking
-- ✅ Code signing automation for both platforms
+### ✅ Phase 1a: COMPLETE!
 
-### 🚧 Phase 1a: ONNX Runtime Integration (BLOCKED)
+**Achievement Summary**:
+- ✅ Flutter + C++ FFI pipeline working
+- ✅ ONNX Runtime integration successful (`Ort::Env` initialization working)
+- ✅ Automated build system (Android + macOS)
+- ✅ Clean dependency management
+- ✅ Debug output confirmed: "ONNX Runtime loaded successfully. Image: 640x480"
 
-**Current Blocker - Dependency Hell**:
-The Homebrew ONNX Runtime approach is fundamentally flawed for macOS app distribution:
+**Final Solution - Disabled App Sandbox**:
+- Modified `/macos/Runner/DebugProfile.entitlements`: `com.apple.security.app-sandbox = false`
+- Direct system library access without bundling complexity
+- Perfect for development (no App Store distribution needed)
 
-```bash
-# ONNX Runtime dependencies (partial list):
-otool -L /usr/local/opt/onnxruntime/lib/libonnxruntime.1.22.2.dylib
-# /usr/local/opt/onnx/lib/libonnx.dylib
-# /usr/local/opt/protobuf/lib/libprotobuf.3.25.5.dylib  
-# /usr/local/opt/abseil/lib/libabsl_*.dylib (20+ libraries)
-# /usr/local/opt/re2/lib/libre2.11.dylib
-# ... 80+ total transitive dependencies
+**Debug Output Proof** (2025-09-09):
+```
+DEBUG C++: detect_objects called with 640x480
+DEBUG C++: Attempting to initialize ONNX Runtime...
+DEBUG C++: ONNX Runtime environment created successfully!
+DEBUG C++: Returning: ONNX Runtime loaded successfully. Image: 640x480
+flutter: DEBUG: detect_objects returned: ONNX Runtime loaded successfully. Image: 640x480
 ```
 
-**Problem**: All dependencies use absolute system paths blocked by App Sandbox.
+### 🚧 Phase 1b: Camera Integration (NEXT - 2-3 hours)
 
-**Potential Solutions**:
-1. **Static ONNX Runtime build** (RECOMMENDED)
-   - Download pre-built static libraries from Microsoft releases
-   - Single `.a` file with all dependencies included
-   - No RPATH/dylib issues to solve
+**Goal**: Replace test button with live camera feed + detection
 
-2. **Custom ONNX Runtime build** (COMPLEX)  
-   - Build from source with `-DBUILD_SHARED_LIBS=OFF`
-   - Requires significant build infrastructure
+**Implementation Plan**:
+1. **Add camera plugin**: Add `camera: ^0.10.6` to `pubspec.yaml`
+2. **Camera preview UI**: Replace `FfiTestWidget` with camera preview
+3. **Capture integration**: Camera → `Uint8List` → `detect_objects()` FFI  
+4. **Simplified FFI**: Remove `hello_world`/`add_numbers`, keep only `detect_objects`
+5. **UI Design**: Camera preview + "Detect" button → show results overlay
 
-3. **Bundling approach** (ABANDONED)
-   - Would require bundling 80+ Homebrew libraries
-   - Each needs individual RPATH fixing
-   - Maintenance nightmare
-
-**Recommended Path**: Switch to static ONNX Runtime build for Phase 1a completion.
-
-### Phase 1a Completion (2-3 hours)
-**Prerequisite**: Resolve ONNX Runtime dependency issue first
-
-**Option A - Static Build Approach** (RECOMMENDED):
-1. Download static ONNX Runtime from Microsoft releases
-2. Update CMakeLists.txt to link static libraries instead of dynamic
-3. Download YOLOv8n.onnx model file  
-4. Test ONNX Environment initialization works
-5. Verify: `"ONNX Runtime loaded successfully. Image: 640x480"`
-
-**Option B - Android-First Approach** (PRAGMATIC):
-1. Focus on Android where ONNX Runtime works via Maven
-2. Get Android builds fully working with ONNX integration
-3. Keep macOS as basic development platform (no ONNX Runtime)
-4. Defer macOS ONNX Runtime until later phase
-
-### Phase 1b: Camera Integration (2-3 hours)
-- Add `camera` plugin to `pubspec.yaml`
-- Implement camera preview widget
-- Capture images as `Uint8List` 
-- Pass image data to `detect_objects()` FFI function
+**Expected Flow**:
+- User sees live camera preview
+- Clicks "Detect Objects" button  
+- App captures current frame → passes to ONNX Runtime
+- Results displayed as overlay on camera view
 
 ## Architecture Notes
 

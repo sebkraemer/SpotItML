@@ -23,12 +23,11 @@ for BUILD_TYPE in Debug Release; do
         # Create Frameworks directory if needed
         mkdir -p "$FRAMEWORKS_DIR"
         
-        # Copy our native library and ONNX Runtime (overwrite if exists)
+        # Copy our native library (ONNX Runtime uses system installation)
         cp -f "$NATIVE_BUILD_DIR/libspotitml_native.dylib" "$FRAMEWORKS_DIR/"
-        cp -f "$NATIVE_BUILD_DIR/libonnxruntime.1.22.2.dylib" "$FRAMEWORKS_DIR/"
         
-        # Code sign all libraries
-        codesign --force --sign - "$FRAMEWORKS_DIR/lib"*.dylib
+        # Code sign our library (ONNX Runtime handled by system)
+        codesign --force --sign - "$FRAMEWORKS_DIR/libspotitml_native.dylib"
         
         echo "  ✅ $BUILD_TYPE deployment complete"
     fi

@@ -61,33 +61,12 @@ target_include_directories(spotitml_native
 # Link ONNX Runtime library
 target_link_libraries(spotitml_native PRIVATE ${ONNXRUNTIME_LIB})
 
-# Bundle ONNX Runtime for macOS app sandbox compatibility
+# macOS: Simple system linking (no App Store distribution needed)
 if(APPLE)
-    # Configure RPATH for our library to find co-located dependencies
-    set_target_properties(spotitml_native PROPERTIES
-        INSTALL_RPATH "@loader_path"
-        BUILD_WITH_INSTALL_RPATH TRUE
-    )
-    
-    # Bundle ONNX Runtime alongside our library
+    # Just code sign our library - system ONNX Runtime will be used directly
     add_custom_command(TARGET spotitml_native POST_BUILD
-        # Step 1: Copy ONNX Runtime library to our build directory
-        COMMAND ${CMAKE_COMMAND} -E copy ${ONNXRUNTIME_LIB} $<TARGET_FILE_DIR:spotitml_native>/libonnxruntime.1.22.2.dylib
-        
-        # Step 2: Fix the dependency path in our library using install_name_tool
-        # Problem: Our library was linked with absolute path "/usr/local/opt/onnxruntime/lib/libonnxruntime.1.22.2.dylib"
-        # Solution: Change it to relative path "@rpath/libonnxruntime.1.22.2.dylib"
-        # Why: @rpath means "look in the same directory as this library" (due to INSTALL_RPATH "@loader_path")
-        # Result: App sandbox can find the bundled ONNX Runtime instead of system location
-        COMMAND install_name_tool -change 
-            "/usr/local/opt/onnxruntime/lib/libonnxruntime.1.22.2.dylib"
-            "@rpath/libonnxruntime.1.22.2.dylib"
-            $<TARGET_FILE:spotitml_native>
-            
-        # Step 3: Code sign both libraries for macOS app distribution
-        COMMAND codesign --force --sign - $<TARGET_FILE_DIR:spotitml_native>/libonnxruntime.1.22.2.dylib
         COMMAND codesign --force --sign - $<TARGET_FILE:spotitml_native>
-        COMMENT "Bundle ONNX Runtime with @rpath linking for app sandbox compatibility"
+        COMMENT "Code sign native library"
     )
 endif()
 
