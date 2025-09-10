@@ -178,7 +178,7 @@ extern "C" {
 ### Development Environment
 
 #### Tools in Use
-- **Primary IDE**: VS Code with Copilot extension
+- **Primary IDE**: VS Code with Copilot extension-*
 - **AI Assistant**: GitHub Copilot for code generation
 - **Context Management**: This Memory Bank file
 - **Build System**: CMake for C++, Flutter build for Dart

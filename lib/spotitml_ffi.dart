@@ -4,7 +4,7 @@ import 'package:ffi/ffi.dart';
 
 // Bindings for the native C++ library
 class SpotitmlNative {
-  static late final ffi.DynamicLibrary _lib = _open();
+  static final ffi.DynamicLibrary _lib = _open();
 
   static ffi.DynamicLibrary _open() {
     if (Platform.isMacOS) {
@@ -18,12 +18,7 @@ class SpotitmlNative {
     }
   }
 
-  static final helloWorld = _lib
-      .lookupFunction<ffi.Pointer<Utf8> Function(), ffi.Pointer<Utf8> Function()>('hello_world');
-
-  static final addNumbers = _lib
-      .lookupFunction<ffi.Int32 Function(ffi.Int32, ffi.Int32), int Function(int, int)>('add_numbers');
-
+  // Phase 1b: Simplified to only detect_objects function
   static final detectObjects = _lib
       .lookupFunction<ffi.Pointer<Utf8> Function(ffi.Pointer<ffi.Uint8>, ffi.Int32, ffi.Int32), 
                       ffi.Pointer<Utf8> Function(ffi.Pointer<ffi.Uint8>, int, int)>('detect_objects');

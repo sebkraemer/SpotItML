@@ -205,3 +205,77 @@ cd native/build && make
 
 **Rationale**: Focus CI/CD effort on production platform (Android), keep development platform (macOS) simple and manual.
 - primary focus in android platform, apple platform secondary (no app store plans)
+
+## Flutter Development Guidelines
+
+### Code Quality & Structure
+- **Separation of concerns**: Keep UI logic separate from business logic
+- **Meaningful naming**: Use consistent, descriptive naming conventions
+- **Widget composition**: Prefer composing smaller widgets over extending existing ones
+- **Small widgets**: Use small, private `Widget` classes instead of helper methods that return widgets
+- **Const optimization**: Use `const` constructors whenever possible for performance
+- **Avoid expensive build operations**: No network calls or complex computations in `build()` methods
+
+### State Management (Built-in Solutions Preferred)
+- **Default approach**: Use Flutter's built-in state management unless explicitly requested otherwise
+- **Single values**: `ValueNotifier` + `ValueListenableBuilder` for simple local state
+- **Complex state**: `ChangeNotifier` + `ListenableBuilder` for shared or complex state  
+- **Async operations**: `Future` + `FutureBuilder` for single async operations
+- **Async streams**: `Stream` + `StreamBuilder` for sequence of async events
+- **Dependency injection**: Manual constructor injection or `provider` package when needed
+
+### Architecture Patterns
+- **MVVM pattern**: Use Model-View-ViewModel pattern for robust applications
+- **Repository pattern**: Abstract data sources (APIs, databases) using repositories/services
+- **Data structures**: Define clear data classes to represent application data
+
+### Navigation
+- **Complex navigation**: Use `go_router` for declarative navigation, deep linking, web support
+- **Simple navigation**: Use built-in `Navigator` for dialogs and temporary views
+
+### Error Handling & Logging
+- **Structured logging**: Use `dart:developer` log function instead of `print`
+- **Error handling**: Implement graceful error handling with try-catch, Either types, or global handlers
+- **DevTools integration**: Use `developer.log` with named categories and error objects
+
+### Data Handling
+- **JSON serialization**: Use `json_serializable` + `json_annotation` for JSON parsing
+- **Field naming**: Use `fieldRename: FieldRename.snake` to convert camelCase to snake_case
+- **Code generation**: Use `build_runner` for all code generation tasks
+
+### Performance & Best Practices
+- **ListView optimization**: Use `ListView.builder` for lazy-loaded lists
+- **Async/await**: Proper use of async/await with robust error handling  
+- **Pattern matching**: Use pattern matching features where they simplify code
+- **Documentation**: Add documentation comments to all public APIs
+
+### UI & Theming
+- **Material 3**: Use `useMaterial3: true` in ThemeData
+- **Theme consistency**: Define centralized ThemeData for consistent styling
+- **Color schemes**: Use `ColorScheme.fromSeed` for harmonious color palettes
+- **Dark/light themes**: Support both themes with user toggle capability
+- **Custom fonts**: Use `google_fonts` package with defined TextTheme
+- **Accessibility**: Implement A11Y features for diverse user needs
+
+### Asset Management
+- **Image handling**: Use `Image.asset` for local assets, `Image.network` with loading/error builders
+- **Asset declaration**: Declare all asset paths in `pubspec.yaml`
+- **Responsive design**: Ensure mobile responsiveness across different screen sizes
+
+### Testing
+- **Unit tests**: Use `package:test` for unit tests
+- **Widget tests**: Use `package:flutter_test` for widget tests  
+- **Integration tests**: Use `package:integration_test` for end-to-end tests
+- **Assertions**: Prefer `package:checks` for expressive assertions over default matchers
+
+### Package Management
+- **Dependency selection**: Choose stable, well-maintained packages from pub.dev
+- **Add dependencies**: Use `flutter pub add <package>` for regular deps
+- **Dev dependencies**: Use `flutter pub add dev:<package>` for development deps
+
+### AI Assistant Guidelines (MCP Integration)
+- **Proactive diagnostics**: Use MCP `getDiagnostics` tool automatically to check for errors, warnings, and issues
+- **Real-time monitoring**: Leverage VS Code's Language Server Protocol integration via MCP for live error detection
+- **Error prevention**: Run diagnostics before and after code changes to catch issues early
+- **Cross-platform awareness**: Monitor both Dart/Flutter and native C++ code diagnostics simultaneously
+- **No configuration needed**: MCP integration works automatically through Claude Code extension in VS Code

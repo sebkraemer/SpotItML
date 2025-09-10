@@ -1,0 +1,177 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Flutter: Build Android Debug (Verbose)",
+            "type": "shell",
+            "command": "flutter",
+            "args": [
+                "build",
+                "apk",
+                "--debug",
+                "--verbose"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$flutter",
+                "$dart-analyze"
+            ]
+        },
+        {
+            "label": "Flutter: Build Android Release (Verbose)",
+            "type": "shell",
+            "command": "flutter",
+            "args": [
+                "build",
+                "apk",
+                "--release",
+                "--verbose"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$flutter",
+                "$dart-analyze"
+            ]
+        },
+        {
+            "label": "Flutter: Run Android Emulator (Verbose)",
+            "type": "shell",
+            "command": "flutter",
+            "args": [
+                "run",
+                "-d",
+                "emulator-5554",
+                "--verbose"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$flutter",
+                "$dart-analyze"
+            ]
+        },
+        {
+            "label": "Gradle: Clean Android Build",
+            "type": "shell",
+            "command": "./gradlew",
+            "args": [
+                "clean",
+                "--info"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "showReuseMessage": false,
+                "clear": false
+            },
+            "options": {
+                "cwd": "${workspaceFolder}/android"
+            }
+        },
+        {
+            "label": "Clean: Nuclear Project Clean",
+            "type": "shell",
+            "command": "bash",
+            "args": [
+                "-c",
+                "echo '🧹 Cleaning all project build and cache directories...' && rm -rf build android/.gradle android/build android/app/build && echo '✅ Clean complete! (HOME Gradle cache preserved)'"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new",
+                "clear": true
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "CMake: Clean Cache Only",
+            "type": "shell",
+            "command": "rm",
+            "args": [
+                "-rf",
+                "build/.cxx"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "Debug: Show CMake Output Log",
+            "type": "shell",
+            "command": "find",
+            "args": [
+                "build/.cxx",
+                "-name",
+                "CMakeOutput.log",
+                "-exec",
+                "echo",
+                "=== {} ===",
+                ";",
+                "-exec",
+                "cat",
+                "{}",
+                ";"
+            ],
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "new"
+            },
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        }
+    ]
+}
