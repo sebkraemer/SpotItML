@@ -15,6 +15,7 @@ Flutter app with C++ native ONNX Runtime integration for ML-powered object detec
 - Flutter SDK
 - **macOS**: `brew install onnxruntime` 
 - **Android**: NDK (handled automatically via Gradle)
+- **yolov8n.onnx model**: `mkdir -p assets/models && curl -O assets/models/yolov8n.onnx https://github.com/ultralytics/assets/releases/download/v8.2.0/yolov8n.onnx`
 
 ### Quick Start
 ```bash

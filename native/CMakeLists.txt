@@ -21,8 +21,6 @@ target_link_libraries(spotitml_native PRIVATE
     onnxruntime::headers 
     onnxruntime::onnxruntime
 )
-target_compile_definitions(spotitml_native PRIVATE -DHAS_ONNXRUNTIME=1)
-message(STATUS "🎯 ONNX Runtime: Linked successfully")
 
 if(APPLE)
     add_custom_command(TARGET spotitml_native POST_BUILD
