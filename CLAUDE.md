@@ -2,26 +2,67 @@
 
 ## Current Status (Phase 1a - COMPLETE! 🎉)
 
-**✅ PHASE 1a ACHIEVED**: Flutter + C++ FFI + ONNX Runtime integration working end-to-end!
+**✅ PHASE 1a ACHIEVED**: Professional ONNX Runtime integration with hybrid CMake+Gradle approach!
 
-**What Works**: ✅ Full working pipeline
-- Basic Flutter + C++ FFI pipeline: `hello_world` → "Hello from C++!", `add_numbers(3,4)` → 7  
-- **ONNX Runtime integration**: `detect_objects` → "ONNX Runtime loaded successfully. Image: 640x480"
-- Automated Android build integration via Gradle + CMake
-- Professional macOS build scripts (`scripts/build_macos.sh`, `scripts/deploy_native_libs.sh`)
-- Clean dependency management (removed 27MB checked-in binaries)
+**What Works**: ✅ Production-ready foundation
+- **Elegant ONNX Runtime Integration**: Modern CMake with FetchContent + Gradle runtime management
+- **Cross-platform**: Android (AAR extraction) + macOS (Homebrew) with unified imported targets  
+- **Professional Architecture**: Modular CMake (`native/cmake/FindONNXRuntime.cmake`) with proper error handling
+- **VSCode Integration**: Comprehensive build tasks, verbose logging, nuclear clean operations
+- **Flutter + C++ FFI**: `detect_objects` → "ONNX Runtime loaded successfully. Image: 640x480"
+- **Hard Requirements**: Fail-fast approach, no conditional compilation fallbacks
 
-**Key Solution**: ❌ App Sandbox → ✅ Development Mode
-- **Problem Solved**: Disabled App Sandbox for development builds (`com.apple.security.app-sandbox = false`)
-- **Result**: Direct access to system ONNX Runtime libraries without bundling complexity
-- **Trade-off**: No App Store distribution (which we don't need)
+**Technical Excellence**:
+- ✅ **No hardcoded paths**: Build-directory relative, fully portable
+- ✅ **Modern CMake**: FetchContent, imported targets (`onnxruntime::headers`, `onnxruntime::onnxruntime`)  
+- ✅ **Hybrid approach**: CMake handles headers/compilation, Gradle handles runtime deployment
+- ✅ **Developer workflow**: VSCode tasks for build, clean, debug with full Gradle output
+- ✅ **Clean architecture**: Reusable CMake modules, structured logging, comprehensive docs
 
 **Infrastructure Completed**:
-- ✅ Android: Maven dependency + automated native builds
-- ✅ macOS: System package manager + automated build pipeline + disabled sandbox
-- ✅ Code signing automation for both platforms  
-- ✅ Clean repo (no checked-in binaries)
-- ✅ **ONNX Runtime working on macOS development platform**
+- ✅ **Android**: Automatic AAR download/extraction via FetchContent with architecture detection
+- ✅ **macOS**: System package integration via find_package with proper validation
+- ✅ **Build System**: Professional CMake + VSCode integration with nuclear clean capabilities
+- ✅ **Documentation**: Comprehensive README with development workflow guide
+- ✅ **Foundation**: Rock-solid base for ML inference pipeline
+
+## Project Roadmap
+
+### 🔄 **Phase 1b: YOLOv8 Model Integration (CURRENT)**
+**Goal**: Transform "ONNX Runtime loaded successfully" → Actual object detection results
+
+**Tasks**:
+1. **Download YOLOv8n.onnx** from Ultralytics official source (~6MB nano model)
+2. **Package model in app**: 
+   - Android: `android/app/src/main/assets/models/yolov8n.onnx`
+   - iOS: Bundle resource (future)
+3. **Update C++ inference**:
+   - Load actual YOLOv8n.onnx model (not just test ONNX Runtime)
+   - Implement tensor preprocessing (resize 640x640, normalize, format)  
+   - Parse YOLOv8 output format (bounding boxes, classes, confidence)
+4. **Test with dummy input**: Verify model loads and produces detection results
+
+**Expected Result**: `detect_objects` → "Detected: person (95%), car (87%), dog (76%)"
+
+---
+
+### 🔜 **Phase 1c: End-to-End Pipeline (NEXT)**
+**Goal**: Camera → ML → UI display working seamlessly
+
+**Tasks**:
+- Camera image preprocessing pipeline
+- Real-time inference with performance optimization  
+- Flutter UI for displaying bounding boxes and labels
+- Error handling and performance monitoring
+
+---
+
+### 🚀 **Phase 2: Advanced Features (FUTURE)**
+- Multiple model support (YOLOv8s, YOLOv8m for accuracy vs speed)
+- Real-time optimization (threading, batch processing)
+- Advanced UI (confidence thresholds, model switching)
+
+---
 
 ## Build Commands (Automated)
 
